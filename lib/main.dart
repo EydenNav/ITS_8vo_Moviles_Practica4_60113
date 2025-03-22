@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'api_service.dart';
+import 'auth_provider.dart';
+import 'login_screen.dart';
+import 'register_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env"); // Cargar variables de entorno
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AuthProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'ToDo List'),
+      home: LoginScreen(), // Pantalla inicial es el login
     );
   }
 }
@@ -43,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Cargar tareas desde la API
   Future<void> _loadTasks() async {
     try {
-      final tasksFromApi = await ApiService.getTasks();
+      final tasksFromApi = await ApiService.getTasks(context);
       setState(() {
         tasks = tasksFromApi;
       });
@@ -69,10 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
       try {
         if (index != null) {
           // Actualizar tarea existente
-          await ApiService.updateTask(tasks[index]['id'], result);
+          await ApiService.updateTask(context, tasks[index]['id'], result);
         } else {
           // Crear nueva tarea
-          await ApiService.createTask(result);
+          await ApiService.createTask(context, result);
         }
         _loadTasks(); // Recargar tareas
       } catch (e) {
@@ -86,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Eliminar una tarea
   void _deleteTask(int index) async {
     try {
-      await ApiService.deleteTask(tasks[index]['id']);
+      await ApiService.deleteTask(context, tasks[index]['id']);
       _loadTasks(); // Recargar tareas
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -99,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _toggleTaskCompletion(int index) async {
     try {
       await ApiService.toggleTaskCompletion(
+        context,
         tasks[index]['id'],
         !tasks[index]['completada'],
       );
@@ -182,7 +192,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// Pantalla para agregar/editar tareas
 class TaskScreen extends StatefulWidget {
   final Map<String, dynamic>? task;
 
@@ -231,7 +240,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 labelText: 'Descripción',
                 hintText: 'Ingresa la descripción de la tarea',
               ),
-              maxLines: null, // TextArea de múltiples líneas
+              maxLines: null,
               keyboardType: TextInputType.multiline,
             ),
             CheckboxListTile(
