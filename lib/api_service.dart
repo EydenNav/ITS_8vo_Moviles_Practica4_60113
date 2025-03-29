@@ -12,7 +12,7 @@ class ApiService {
   static Future<List<Map<String, dynamic>>> getTasks(BuildContext context) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.get(
-      Uri.parse('$_apiUrl/api/tareas'),
+      Uri.parse('$_apiUrl/tareas'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -29,7 +29,7 @@ class ApiService {
   static Future<Map<String, dynamic>> getTaskById(BuildContext context, int id) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.get(
-      Uri.parse('$_apiUrl/api/tareas/$id'),
+      Uri.parse('$_apiUrl/tareas/$id'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -46,7 +46,7 @@ class ApiService {
   static Future<Map<String, dynamic>> createTask(BuildContext context, Map<String, dynamic> task) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.post(
-      Uri.parse('$_apiUrl/api/tareas'),
+      Uri.parse('$_apiUrl/tareas'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -64,7 +64,7 @@ class ApiService {
   static Future<Map<String, dynamic>> updateTask(BuildContext context, int id, Map<String, dynamic> task) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.put(
-      Uri.parse('$_apiUrl/api/tareas/$id'),
+      Uri.parse('$_apiUrl/tareas/$id'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -82,7 +82,7 @@ class ApiService {
   static Future<Map<String, dynamic>> toggleTaskCompletion(BuildContext context, int id, bool completed) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.patch(
-      Uri.parse('$_apiUrl/api/tareas/$id'),
+      Uri.parse('$_apiUrl/tareas/$id'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -100,7 +100,7 @@ class ApiService {
   static Future<void> deleteTask(BuildContext context, int id) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     final response = await http.delete(
-      Uri.parse('$_apiUrl/api/tareas/$id'),
+      Uri.parse('$_apiUrl/tareas/$id'), // Corrección
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

@@ -19,7 +19,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final email = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    // Validaciones según la tarea
     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
       setState(() => _errorMessage = 'El username debe ser un correo válido');
       return;
@@ -31,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('${dotenv.env['API_URL']}/api/auth/register'),
+        Uri.parse('${dotenv.env['API_URL']}/auth/register'), // Corrección: elimina el /api adicional
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'username': email, 'password': password}),
       );

@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('${dotenv.env['API_URL']}/api/auth/login'),
+        Uri.parse('${dotenv.env['API_URL']}/auth/login'), // Corrección: elimina el /api adicional
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'username': email, 'password': password}),
       );
